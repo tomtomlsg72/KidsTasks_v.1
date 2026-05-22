@@ -21,6 +21,13 @@
     --active-color: var(--jade);
     --active-glow: var(--jade-glow);
   }
+
+  html, body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
  
   * { margin: 0; padding: 0; box-sizing: border-box; }
  
@@ -31,6 +38,10 @@
     overflow-x: hidden;
     position: relative;
   }
+
+  input, textarea {
+  font-size: 16px;
+}
  
   /* Ambient background orbs */
   .orb {
@@ -515,3 +526,202 @@
     .avatar-inner { font-size: 2rem; }
     .clock { font-size: 1.2rem; }
   }
+
+  /* ===============================
+   3 COLONNES LAYOUT
+=================================*/
+
+.columns{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:24px;
+  margin-top:10px;
+  animation:fadeIn .4s ease;
+}
+
+.column{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:18px 16px 20px;
+  backdrop-filter:blur(14px);
+  position:relative;
+  overflow:hidden;
+  transition:transform .3s ease, border-color .3s ease;
+}
+
+.column:hover{
+  border-color:rgba(255,255,255,0.14);
+  transform:translateY(-4px);
+}
+
+.column h3{
+  font-size:.85rem;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+  color:var(--muted);
+}
+
+/* ===============================
+   TASK DONE STATE
+=================================*/
+
+.task.done{
+  opacity:.45;
+  text-decoration:line-through;
+  pointer-events:none;
+  filter:grayscale(.4);
+}
+
+/* ===============================
+   REWARD DISPLAY
+=================================*/
+
+.reward-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:14px 20px;
+  border-radius:100px;
+  margin-bottom:24px;
+  font-weight:800;
+  letter-spacing:.05em;
+  background:var(--surface);
+  border:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  animation:fadeIn .4s ease;
+}
+
+.reward-box strong{
+  color:var(--active-color);
+}
+
+.reward-icon{
+  font-size:1.4rem;
+  animation:float 2.5s ease-in-out infinite;
+}
+
+/* ===============================
+   COLUMN COLORS DYNAMIC
+=================================*/
+
+.jade-theme .column{
+  box-shadow:0 0 25px var(--jade-glow);
+}
+
+.alya-theme .column{
+  box-shadow:0 0 25px var(--alya-glow);
+}
+
+.eden-theme .column{
+  box-shadow:0 0 25px var(--eden-glow);
+}
+
+/* ===============================
+   RESPONSIVE
+=================================*/
+
+@media (max-width: 1100px){
+  .columns{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media (max-width: 760px){
+  .columns{
+    grid-template-columns:1fr;
+  }
+}
+
+.task-card.done{
+  text-decoration: line-through;
+  opacity: .9;
+  cursor: pointer;          /* reste cliquable */
+}
+
+.task-card.done:hover{
+  opacity: .6;              /* feedback visuel au survol */
+  transform: translateX(4px);
+}
+
+/* ===============================
+   ZONE PRINCIPALE PLUS LARGE
+=================================*/
+
+.main{
+  max-width:1400px;   /* avant 900px */
+}
+
+/* ===============================
+   COLONNES PLUS LARGES
+=================================*/
+
+.columns{
+  grid-template-columns: repeat(3, minmax(350px, 1fr));
+  gap:32px;
+}
+
+/* ===============================
+   TASK CARDS PRENNENT 100%
+=================================*/
+
+.column{
+  padding:24px;
+}
+
+.task-card{
+  width:100%;
+}
+
+/* tâche barrée + glow actif */
+.task-card.done{
+  text-decoration: line-through;
+  opacity:.9;
+}
+
+.glow-done{
+  border-color: var(--active-color);
+  box-shadow: 0 0 20px var(--active-glow);
+}
+
+/* ===============================
+   SUPPRIMER LE REBOND DES TASKS
+=================================*/
+
+.task-card{
+  animation: none !important;
+  transition: all 0.3s ease;
+}
+
+.task-card:hover{
+  transform: none !important;
+}
+
+/* =================================
+   SUPPRIMER TOUTES LES ANIMATIONS TASK
+==================================== */
+
+/* Désactive animation d'entrée */
+.task-card{
+  animation: none !important;
+}
+
+/* Désactive animation complete */
+.task-card.completing{
+  animation: none !important;
+}
+
+/* Supprime keyframe visuellement */
+@keyframes slideInUp {
+  from { opacity:1; transform:none; }
+  to   { opacity:1; transform:none; }
+}
+
+@keyframes completeAnim {
+  from { transform:none; opacity:1; }
+  to   { transform:none; opacity:1; }
+}
+
