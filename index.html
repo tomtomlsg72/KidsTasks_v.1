@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma Journée ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<style>canvas[style*="position: fixed"] {pointer-events: none;}</style>
+</head>
+<body>
+ 
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+ 
+<div class="screen">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      ⚡ <span>LSG Dashboard</span>
+    </div>
+    <div style="text-align:right">
+      <div class="clock" id="clock">--:--</div>
+      <div class="date-label" id="dateLabel">…</div>
+    </div>
+  </header>
+ 
+  <!-- AVATAR SELECTOR -->
+  <div class="avatar-bar">
+    <div class="avatar-card jade" data-child="jade" onclick="selectChild('jade')">
+      <div class="avatar-ring">
+        <div class="avatar-inner">
+          <img src="images/jade.png" alt="jade">
+        </div>
+      </div>
+      <div class="avatar-badge" id="badge-jade"></div>
+      <div class="avatar-name">Jade</div>
+    </div>
+    <div class="avatar-card alya" data-child="alya" onclick="selectChild('alya')">
+      <div class="avatar-ring">
+        <div class="avatar-inner">
+          <img src="images/alya.png" alt="alya">
+        </div>
+      </div>
+      <div class="avatar-badge" id="badge-alya"></div>
+      <div class="avatar-name">Alya</div>
+    </div>
+    <div class="avatar-card eden" data-child="eden" onclick="selectChild('eden')">
+      <div class="avatar-ring">
+        <div class="avatar-inner">
+          <img src="images/eden.png" alt="eden">
+        </div>
+      </div>
+      <div class="avatar-badge" id="badge-eden"></div>
+      <div class="avatar-name">Eden</div>
+    </div>
+  </div>
+ 
+  <div class="section-divider"></div>
+ 
+  <!-- MAIN CONTENT -->
+  <main class="main" id="mainContent">
+    <div class="welcome-screen">
+      <div class="welcome-emoji">👋</div>
+      <div class="welcome-title">Bonjour ! Qui es-tu ?</div>
+      <div class="welcome-sub">Clique sur ton avatar pour voir tes tâches du jour</div>
+    </div>
+  </main>
+</div>
+ 
+<div class="confetti-container" id="confettiContainer"></div>
+ 
+<script>
+// ===== DATA =====
+const tasks = {
+  jade: [
+    { id: 'j1',   icon: '🌞', title: 'Le lever',        desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
+    { id: 'j2',   icon: '🥣', title: 'Le p\'tit dèj',   desc: 'Prend ton ptit dej, dÃ©barrasse ta table et met ta vaisselle dans le lave vaisselle' },
+    { id: 'j3',   icon: '🪥', title: 'La toilette',     desc: 'Brosse tes dents, nettoie ton visage et le lavabo'},
+    { id: 'j4',   icon: '👕', title: 'L\'habillage',    desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
+    { id: 'j5',   icon: '🛏️', title: 'La chambre',      desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
+    { id: 'j6',   icon: '🍪', title: 'Le gouter',       desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
+    { id: 'j7',   icon: '📒', title: 'Les leçons',      desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
+    { id: 'j8',   icon: '🚿', title: 'La douche',       desc: 'Garde ton pantalon si il n\'est pas sale et prends ta douche sans jouer avec l\'eau' },
+    { id: 'j9',   icon: '🍝', title: 'Le diner',        desc: 'Met et debarrasse la table calmement et sans raler' },
+    { id: 'j10',  icon: '🪥', title: 'Les dents',       desc: 'Brosse tes dents, nettoie ton lavabo' },
+    { id: 'j11',  icon: '😴', title: 'Le coucher',      desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
+
+  ],
+  alya: [
+{ id: 'j1',   icon: '🌞', title: 'Le lever',        desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
+    { id: 'j2',   icon: '🥣', title: 'Le p\'tit dèj',   desc: 'Prend ton ptit dej, dÃ©barrasse ta table et met ta vaisselle dans le lave vaisselle' },
+    { id: 'j3',   icon: '🪥', title: 'La toilette',     desc: 'Brosse tes dents, nettoie ton visage et le lavabo'},
+    { id: 'j4',   icon: '👕', title: 'L\'habillage',    desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
+    { id: 'j5',   icon: '🛏️', title: 'La chambre',      desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
+    { id: 'j6',   icon: '🍪', title: 'Le gouter',       desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
+    { id: 'j7',   icon: '📒', title: 'Les leçons',      desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
+    { id: 'j8',   icon: '🚿', title: 'La douche',       desc: 'Garde ton pantalon si il n\'est pas sale et prends ta douche sans jouer avec l\'eau' },
+    { id: 'j9',   icon: '🍝', title: 'Le diner',        desc: 'Met et debarrasse la table calmement et sans raler' },
+    { id: 'j10',  icon: '🪥', title: 'Les dents',       desc: 'Brosse tes dents, nettoie ton lavabo' },
+    { id: 'j11',  icon: '😴', title: 'Le coucher',      desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
+    ],
+  eden: [
+{ id: 'j1',   icon: '🌞', title: 'Le lever',        desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
+    { id: 'j2',   icon: '🥣', title: 'Le p\'tit dèj',   desc: 'Prend ton ptit dej, dÃ©barrasse ta table et met ta vaisselle dans le lave vaisselle' },
+    { id: 'j3',   icon: '🪥', title: 'La toilette',     desc: 'Brosse tes dents, nettoie ton visage et le lavabo'},
+    { id: 'j4',   icon: '👕', title: 'L\'habillage',    desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
+    { id: 'j5',   icon: '🛏️', title: 'La chambre',      desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
+    { id: 'j6',   icon: '🍪', title: 'Le gouter',       desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
+    { id: 'j7',   icon: '📒', title: 'Les leçons',      desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
+    { id: 'j8',   icon: '🚿', title: 'La douche',       desc: 'Garde ton pantalon si il n\'est pas sale et prends ta douche sans jouer avec l\'eau' },
+    { id: 'j9',   icon: '🍝', title: 'Le diner',        desc: 'Met et debarrasse la table calmement et sans raler' },
+    { id: 'j10',  icon: '🪥', title: 'Les dents',       desc: 'Brosse tes dents, nettoie ton lavabo' },
+    { id: 'j11',  icon: '😴', title: 'Le coucher',      desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
+    ]
+};
+ 
+const colors = { jade: '#00e5a0', alya: '#ff6eb4', eden: '#7b61ff' };
+const glows  = { jade: 'rgba(0,229,160,0.25)', alya: 'rgba(255,110,180,0.25)', eden: 'rgba(123,97,255,0.25)' };
+ 
+let state = {
+  active: null,
+  done: { jade: new Set(), alya: new Set(), eden: new Set() }
+};
+ 
+// ===== CLOCK =====
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const months = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  document.getElementById('dateLabel').textContent =
+    days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()];
+}
+updateClock();
+setInterval(updateClock, 1000);
+ 
+// ===== SELECT CHILD =====
+function selectChild(child) {
+  state.active = child;
+ 
+  // Update CSS vars
+  document.documentElement.style.setProperty('--active-color', colors[child]);
+  document.documentElement.style.setProperty('--active-glow', glows[child]);
+  document.querySelector('.orb-1').style.background = colors[child];
+  document.querySelector('.orb-2').style.background = colors[child];
+ 
+  // Avatar highlights
+  document.querySelectorAll('.avatar-card').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.avatar-card.${child}`).classList.add('active');
+ 
+  renderTasks(child);
+}
+ 
+// ===== RENDER TASKS =====
+function renderTasks(child) {
+  const main = document.getElementById('mainContent');
+  const remaining = tasks[child].filter(t => !state.done[child].has(t.id));
+  const total = tasks[child].length;
+  const doneCount = state.done[child].size;
+ 
+  if (remaining.length === 0) {
+    main.innerHTML = `
+      <button class="back-btn" onclick="goHome()">
+        <span class="back-arrow">←</span> Accueil
+      </button>
+      <div class="all-done">
+        <div class="all-done-trophy">🏆</div>
+        <div class="all-done-stars">
+          <div class="star-item">⭐</div>
+          <div class="star-item">⭐</div>
+          <div class="star-item">⭐</div>
+        </div>
+        <div class="all-done-title">Toutes les tâches sont faites !</div>
+        <div class="all-done-sub">Bravo ${child.charAt(0).toUpperCase()+child.slice(1)} ! 🎉<br>Tu as été incroyable aujourd'hui.</div>
+      </div>`;
+    spawnBigConfetti(child);
+    return;
+  }
+ 
+  const progress = Math.round((doneCount / total) * 100);
+  const firstName = child.charAt(0).toUpperCase() + child.slice(1);
+ 
+  let html = `
+    <button class="back-btn" onclick="goHome()">
+      <span class="back-arrow">←</span> Accueil
+    </button>
+    <div class="tasks-header">
+      <div class="tasks-greeting">Salut <span class="name-colored ${child}">${firstName}</span> 👋</div>
+      <div class="progress-pill">
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${progress}%"></div>
+        </div>
+        <div class="progress-label">${doneCount}/${total}</div>
+      </div>
+    </div>
+    <div class="tasks-list" id="tasksList">
+  `;
+ 
+  remaining.forEach((task, i) => {
+    html += `
+      <div class="task-card ${child}-card"
+           id="task-${task.id}"
+           style="animation-delay:${i * 0.07}s"
+           onclick="completeTask('${child}', '${task.id}')">
+        <div class="task-accent"></div>
+        <div class="task-icon-wrap">${task.icon}</div>
+        <div class="task-content">
+          <div class="task-title">${task.title}</div>
+          <div class="task-desc">${task.desc}</div>
+        </div>
+        <div class="task-action">✓</div>
+      </div>
+    `;
+  });
+ 
+  html += `</div>`;
+  main.innerHTML = html;
+  updateBadge(child);
+}
+ 
+// ===== COMPLETE TASK =====
+function completeTask(child, taskId) {
+  const card = document.getElementById(`task-${taskId}`);
+  if (!card || card.classList.contains('completing')) return;
+
+  const cardHeight = card.offsetHeight;
+
+  // Fige la hauteur + empêche le saut
+  card.style.height = cardHeight + 'px';
+  card.style.overflow = 'hidden';
+  card.style.marginBottom = '12px';
+  card.style.transition = 'height 0.35s ease, margin 0.35s ease, opacity 0.35s ease';
+
+  // Phase 1 : animation de sortie (glisse à droite + fade)
+  card.style.transform = 'translateX(110%) scale(0.95)';
+  card.style.opacity = '0';
+  card.style.transitionProperty = 'transform, opacity';
+  card.style.transitionDuration = '0.4s';
+  card.style.transitionTimingFunction = 'cubic-bezier(0.4, 0, 0.2, 1)';
+
+  // Phase 2 : collapse de la hauteur après la sortie
+  setTimeout(() => {
+    card.style.transitionProperty = 'height, margin, padding';
+    card.style.transitionDuration = '0.3s';
+    card.style.transitionTimingFunction = 'ease';
+    card.style.height = '0px';
+    card.style.marginBottom = '0px';
+    card.style.padding = '0px';
+  }, 380);
+
+  // Phase 3 : mise à jour du state
+  setTimeout(() => {
+    state.done[child].add(taskId);
+    spawnConfetti(
+      card.getBoundingClientRect().left + card.getBoundingClientRect().width / 2,
+      card.getBoundingClientRect().top,
+      child
+    );
+    renderTasks(child);
+    updateBadge(child);
+  }, 680);
+}
+ 
+// ===== CONFETTI =====
+function spawnConfetti(x, y, child) {
+  const palette = {
+    jade: ['#00e5a0','#00ffe0','#b3fff0','#00b07a','#80ffd0'],
+    alya: ['#ff6eb4','#ffb3d9','#ff3399','#ffd6ec','#ff85c2'],
+    eden: ['#7b61ff','#b3aaff','#5a42cc','#e0ddff','#a594ff'],
+  };
+  confetti({
+    particleCount: 60,
+    spread: 70,
+    origin: { x: x / window.innerWidth, y: y / window.innerHeight },
+    colors: palette[child],
+    shapes: ['circle', 'square'],
+    scalar: 1.1,
+    ticks: 120,
+    gravity: 1.2,
+    drift: 0.5,
+  });
+}
+
+// ===== CONFETTI FINAL=====
+function spawnBigConfetti(child) {
+  const palette = {
+    jade: ['#00e5a0','#00ffe0','#b3fff0','#00b07a','#80ffd0','#ffffff'],
+    alya: ['#ff6eb4','#ffb3d9','#ff3399','#ffd6ec','#ff85c2','#ffffff'],
+    eden: ['#7b61ff','#b3aaff','#5a42cc','#e0ddff','#a594ff','#ffffff'],
+  };
+  const colors = palette[child];
+
+  // Salve 1 — explosion centrale
+  confetti({
+    particleCount: 120,
+    spread: 100,
+    origin: { x: 0.5, y: 0.55 },
+    colors,
+    shapes: ['circle', 'square'],
+    scalar: 1.3,
+    ticks: 200,
+    gravity: 0.9,
+    startVelocity: 45,
+  });
+
+  // Salve 2 — côté gauche
+  setTimeout(() => {
+    confetti({
+      particleCount: 80,
+      angle: 60,
+      spread: 70,
+      origin: { x: 0, y: 0.65 },
+      colors,
+      shapes: ['circle', 'square'],
+      scalar: 1.1,
+      ticks: 180,
+      gravity: 1,
+      startVelocity: 55,
+    });
+  }, 180);
+
+  // Salve 3 — côté droit
+  setTimeout(() => {
+    confetti({
+      particleCount: 80,
+      angle: 120,
+      spread: 70,
+      origin: { x: 1, y: 0.65 },
+      colors,
+      shapes: ['circle', 'square'],
+      scalar: 1.1,
+      ticks: 180,
+      gravity: 1,
+      startVelocity: 55,
+    });
+  }, 360);
+
+  // Salve 4 — pluie finale depuis le haut
+  setTimeout(() => {
+    confetti({
+      particleCount: 60,
+      spread: 160,
+      origin: { x: 0.5, y: 0 },
+      colors,
+      shapes: ['circle'],
+      scalar: 0.8,
+      ticks: 250,
+      gravity: 0.6,
+      startVelocity: 20,
+      drift: 1,
+    });
+  }, 600);
+}
+ 
+// ===== BADGE =====
+function updateBadge(child) {
+  const remaining = tasks[child].length - state.done[child].size;
+  const badge = document.getElementById(`badge-${child}`);
+  if (remaining > 0) {
+    badge.textContent = remaining;
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+  }
+}
+ 
+// Init badges
+['jade','alya','eden'].forEach(c => updateBadge(c));
+ 
+// ===== GO HOME =====
+function goHome() {
+  state.active = null;
+ 
+  // Reset CSS vars to default
+  document.documentElement.style.setProperty('--active-color', '#00e5a0');
+  document.documentElement.style.setProperty('--active-glow', 'rgba(0,229,160,0.25)');
+  document.querySelector('.orb-1').style.background = '';
+  document.querySelector('.orb-2').style.background = '';
+ 
+  // Remove active state from all avatars
+  document.querySelectorAll('.avatar-card').forEach(c => c.classList.remove('active'));
+ 
+  // Show welcome screen
+  const main = document.getElementById('mainContent');
+  main.innerHTML = `
+    <div class="welcome-screen">
+      <div class="welcome-emoji">👋</div>
+      <div class="welcome-title">Bonjour ! Qui es-tu ?</div>
+      <div class="welcome-sub">Clique sur ton avatar pour voir tes tâches du jour</div>
+    </div>`;
+}
+</script>
+</body>
+</html>
