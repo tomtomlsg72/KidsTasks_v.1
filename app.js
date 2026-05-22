@@ -7,8 +7,8 @@ var WEEKLY_TASK_REWARD = 15;
 // ==========================================
 // TASKS (version ES5)
 // ==========================================
-var tasks = {};
-     tasks.jade = {
+var tasks = {
+     jade: {
         morning: [
         { id: 'j1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
         { id: 'j2', icon: '🥣', title: 'Le p\'tit dèj', desc: 'Prend ton ptit dej, dÃ©barrasse ta table et met ta vaisselle dans le lave vaisselle' },
@@ -30,7 +30,7 @@ var tasks = {};
         { id: "e2", icon: "🍝", title: "Draps", desc: "Enlève les draps de ton lit et refais ton lit avec les draps propres" } 
       ]
       },
-    tasks.alya = {
+    alya: {
         morning: [
         { id: 'j1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
         { id: 'j2', icon: '🥣', title: 'Le p\'tit dèj', desc: 'Prend ton ptit dej, dÃ©barrasse ta table et met ta vaisselle dans le lave vaisselle' },
@@ -52,7 +52,7 @@ var tasks = {};
         { id: "e2", icon: "🍝", title: "Draps", desc: "Enlève les draps de ton lit et refais ton lit avec les draps propres" } 
       ]
       },
-    tasks.eden = {
+    eden: {
         morning: [
         { id: 'j1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
         { id: 'j2', icon: '🥣', title: 'Le p\'tit dèj', desc: 'Prend ton ptit dej, dÃ©barrasse ta table et met ta vaisselle dans le lave vaisselle' },
@@ -73,15 +73,16 @@ var tasks = {};
         { id: "e1", icon: "🚿", title: "Ménage", desc: "Range ta chambre, fais les poussières et passe l'aspirateur dans ta chambre" },
         { id: "e2", icon: "🍝", title: "Draps", desc: "Enlève les draps de ton lit et refais ton lit avec les draps propres" } 
       ]
-    };
+    }
+};
 
-// Dupliquer pour alya et eden (copie manuelle)
 tasks.alya = JSON.parse(JSON.stringify(tasks.jade));
 tasks.eden = JSON.parse(JSON.stringify(tasks.jade));
 
 // ==========================================
 // STATE
 // ==========================================
+
 var state = {
   date: today(),
   doneDaily: { jade:[], alya:[], eden:[] },
@@ -91,49 +92,48 @@ var state = {
 };
 
 function today() {
-  var now = new Date();
-  var year = now.getFullYear();
-  var month = now.getMonth() + 1;
-  var day = now.getDate();
-  if (month < 10) month = '0' + month;
-  if (day < 10) day = '0' + day;
-  return year + '-' + month + '-' + day;
+  var d = new Date();
+  var dd = d.getDate();
+  var mm = d.getMonth()+1;
+  var yyyy = d.getFullYear();
+  if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm}
+  return yyyy + '-' + mm + '-' + dd;
 }
 
 // ==========================================
 // SAVE / LOAD
 // ==========================================
+
 function saveState() {
   localStorage.setItem("lsg-state", JSON.stringify(state));
 }
 
 function loadState() {
   var saved = localStorage.getItem("lsg-state");
-  if (!saved) return;
+  if(!saved) return;
 
   var parsed = JSON.parse(saved);
 
   state.date = parsed.date || today();
-  state.doneDaily = parsed.doneDaily || state.doneDaily;
-  state.doneWeekly = parsed.doneWeekly || state.doneWeekly;
-  state.rewardsTomorrow = parsed.rewardsTomorrow || state.rewardsTomorrow;
-  state.rewardsAvailable = parsed.rewardsAvailable || state.rewardsAvailable;
+  state.doneDaily = parsed.doneDaily || { jade:[], alya:[], eden:[] };
+  state.doneWeekly = parsed.doneWeekly || { jade:[], alya:[], eden:[] };
+  state.rewardsTomorrow = parsed.rewardsTomorrow || { jade:0, alya:0, eden:0 };
+  state.rewardsAvailable = parsed.rewardsAvailable || { jade:0, alya:0, eden:0 };
 }
 
 // ==========================================
 // RESET MINUIT
 // ==========================================
-function checkMidnightReset() {
-  if (state.date !== today()) {
 
-    var children = ['jade','alya','eden'];
-    for (var idx = 0; idx < children.length; idx++) {
-      var child = children[idx];
+function checkMidnightReset() {
+  if(state.date !== today()) {
+    var children = ["jade","alya","eden"];
+    for(var i=0; i<children.length; i++) {
+      var child = children[i];
       state.rewardsAvailable[child] += state.rewardsTomorrow[child];
       state.rewardsTomorrow[child] = 0;
       state.doneDaily[child] = [];
     }
-
     state.date = today();
     saveState();
   }
@@ -142,6 +142,7 @@ function checkMidnightReset() {
 // ==========================================
 // SELECT CHILD
 // ==========================================
+
 function selectChild(child) {
   renderTasks(child);
 }
@@ -149,52 +150,51 @@ function selectChild(child) {
 // ==========================================
 // RENDER
 // ==========================================
+
 function renderTasks(child) {
   var main = document.getElementById("mainContent");
 
-  var html = '';
-  html += '<button class="back-btn" onclick="goHome()">';
-  html += '<span class="back-arrow">←</span> Accueil';
-  html += '</button>';
+  main.innerHTML =
+    '<button class="back-btn" onclick="goHome()">' +
+      '<span class="back-arrow">←</span> Accueil' +
+    '</button>' +
 
-  html += '<div class="reward-box">';
-  html += '⏳ Pour demain : <strong>' + state.rewardsTomorrow[child] + ' min</strong>';
-  html += '</div>';
+    '<div class="reward-box">' +
+      '⏳ Pour demain : <strong>' + state.rewardsTomorrow[child] + ' min</strong>' +
+    '</div>' +
 
-  html += '<div class="columns">';
-  html += renderColumn(child, 'morning', '🌅 Matin', true);
-  html += renderColumn(child, 'afternoon', '🌤 Après-midi', true);
-  html += renderColumn(child, 'weekly', '📅 Hebdomadaire (+15min)', false);
-  html += '</div>';
-
-  main.innerHTML = html;
+    '<div class="columns">' +
+      renderColumn(child, "morning", "🌅 Matin", true) +
+      renderColumn(child, "afternoon", "🌤 Après-midi", true) +
+      renderColumn(child, "weekly", "📅 Hebdomadaire (+15min)", false) +
+    '</div>';
 }
 
 function renderColumn(child, period, label, isDaily) {
-  var list = isDaily ? state.doneDaily[child] : state.doneWeekly[child];
-  var tasksPeriod = tasks[child][period];
-  var html = '';
+  var doneList = isDaily ? state.doneDaily[child] : state.doneWeekly[child];
+  var html = '<div class="column"><h3>' + label + '</h3><div class="tasks-list">';
 
-  html += '<div class="column">';
-  html += '<h3>' + label + '</h3>';
-  html += '<div class="tasks-list">';
+  var tasksList = tasks[child][period];
+  for(var i=0; i<tasksList.length; i++) {
+    var task = tasksList[i];
+    var done = false;
+    for(var j=0; j<doneList.length; j++) {
+      if(doneList[j] === task.id) { done = true; break; }
+    }
 
-  for (var i = 0; i < tasksPeriod.length; i++) {
-    var task = tasksPeriod[i];
-    var done = list.indexOf(task.id) > -1;
+    html +=
+      '<div class="task-card ' + child + '-card ' + (done ? 'done glow-done' : '') + '" ' +
+      'onclick="toggleTask(event,\'' + child + '\',\'' + task.id + '\',\'' + period + '\',' + isDaily + ')">' +
 
-    html += '<div class="task-card ' + child + '-card';
-    if (done) html += ' done glow-done';
-    html += '" onclick="toggleTask(\'' + child + '\',\'' + task.id + '\',\'' + period + '\',' + isDaily + ')">';
+      '<div class="task-accent"></div>' +
+      '<div class="task-icon-wrap">' + task.icon + '</div>' +
+      '<div class="task-content">' +
+        '<div class="task-title">' + task.title + '</div>' +
+        '<div class="task-desc">' + task.desc + '</div>' +
+      '</div>' +
+      '<div class="task-action">' + (done ? '↩' : '✓') + '</div>' +
 
-    html += '<div class="task-accent"></div>';
-    html += '<div class="task-icon-wrap">' + task.icon + '</div>';
-    html += '<div class="task-content">';
-    html += '<div class="task-title">' + task.title + '</div>';
-    html += '<div class="task-desc">' + task.desc + '</div>';
-    html += '</div>';
-    html += '<div class="task-action">' + (done ? '↩' : '✓') + '</div>';
-    html += '</div>';
+      '</div>';
   }
 
   html += '</div></div>';
@@ -202,28 +202,38 @@ function renderColumn(child, period, label, isDaily) {
 }
 
 // ==========================================
-// TOGGLE TASK
+// TOGGLE
 // ==========================================
-function toggleTask(child, id, period, isDaily) {
-  var list = isDaily ? state.doneDaily[child] : state.doneWeekly[child];
-  var index = list.indexOf(id);
 
-  if (index > -1) {
-    // Décocher
+function toggleTask(event, child, id, period, isDaily) {
+  var list = isDaily ? state.doneDaily[child] : state.doneWeekly[child];
+  var card = event.currentTarget;
+
+  var index = -1;
+  for(var i=0; i<list.length; i++) {
+    if(list[i] === id) { index = i; break; }
+  }
+
+  if(index > -1) {
     list.splice(index, 1);
-    if (!isDaily) {
+    card.classList.remove("done", "glow-done");
+    card.querySelector(".task-action").textContent = "✓";
+
+    if(!isDaily) {
       state.rewardsTomorrow[child] -= WEEKLY_TASK_REWARD;
     }
+
   } else {
-    // Cocher
     list.push(id);
-    if (!isDaily) {
+    card.classList.add("done", "glow-done");
+    card.querySelector(".task-action").textContent = "↩";
+
+    if(!isDaily) {
       state.rewardsTomorrow[child] += WEEKLY_TASK_REWARD;
     }
   }
 
-  // Vérifier si toutes les daily sont faites
-  if (isAllDailyDone(child)) {
+  if(isAllDailyDone(child)) {
     state.rewardsTomorrow[child] =
       DAILY_REWARD +
       state.doneWeekly[child].length * WEEKLY_TASK_REWARD;
@@ -231,46 +241,50 @@ function toggleTask(child, id, period, isDaily) {
     spawnConfetti();
   }
 
+  var rewardBox = document.querySelector(".reward-box strong");
+  rewardBox.textContent = state.rewardsTomorrow[child] + " min";
+
   saveState();
-  renderTasks(child);
 }
 
 function isAllDailyDone(child) {
-  var totalDaily = tasks[child].morning.length + tasks[child].afternoon.length;
-  return state.doneDaily[child].length === totalDaily;
+  return state.doneDaily[child].length ===
+    tasks[child].morning.length +
+    tasks[child].afternoon.length;
 }
 
 // ==========================================
 // CONFETTI
 // ==========================================
+
 function spawnConfetti() {
-  if (typeof confetti !== 'undefined') {
-    confetti({
-      particleCount: 180,
-      spread: 140,
-      origin: { y: 0.6 }
-    });
-  }
+  confetti({
+    particleCount: 180,
+    spread: 140,
+    origin: { y: 0.6 }
+  });
 }
 
 // ==========================================
 // HOME
 // ==========================================
+
 function goHome() {
   document.getElementById("mainContent").innerHTML =
     '<div class="welcome-screen">' +
-    '<div class="welcome-emoji">👋</div>' +
-    '<div class="welcome-title">Bonjour !</div>' +
+      '<div class="welcome-emoji">👋</div>' +
+      '<div class="welcome-title">Bonjour !</div>' +
     '</div>';
 }
 
 // ==========================================
 // INIT
 // ==========================================
+
 loadState();
 checkMidnightReset();
 
-// Rendre les fonctions globales
+// rendre global
 window.selectChild = selectChild;
 window.toggleTask = toggleTask;
 window.goHome = goHome;
