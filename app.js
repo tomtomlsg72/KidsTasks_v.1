@@ -1,15 +1,14 @@
 // ==========================================
 // CONFIG
 // ==========================================
-
 var DAILY_REWARD = 45;
-const WEEKLY_TASK_REWARD = 15;
+var WEEKLY_TASK_REWARD = 15;
 
 // ==========================================
-// TASKS (VERSION SAFE)
+// TASKS (version ES5)
 // ==========================================
-const tasks = {
-      jade: {
+var tasks = {};
+     tasks.jade = {
         morning: [
         { id: 'j1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
         { id: 'j2', icon: '🥣', title: 'Le p\'tit dèj', desc: 'Prend ton ptit dej, dÃ©barrasse ta table et met ta vaisselle dans le lave vaisselle' },
@@ -31,7 +30,7 @@ const tasks = {
         { id: "e2", icon: "🍝", title: "Draps", desc: "Enlève les draps de ton lit et refais ton lit avec les draps propres" } 
       ]
       },
-      alya: {
+    tasks.alya = {
         morning: [
         { id: 'j1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
         { id: 'j2', icon: '🥣', title: 'Le p\'tit dèj', desc: 'Prend ton ptit dej, dÃ©barrasse ta table et met ta vaisselle dans le lave vaisselle' },
@@ -53,7 +52,7 @@ const tasks = {
         { id: "e2", icon: "🍝", title: "Draps", desc: "Enlève les draps de ton lit et refais ton lit avec les draps propres" } 
       ]
       },
-    eden: {
+    tasks.eden = {
         morning: [
         { id: 'j1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
         { id: 'j2', icon: '🥣', title: 'Le p\'tit dèj', desc: 'Prend ton ptit dej, dÃ©barrasse ta table et met ta vaisselle dans le lave vaisselle' },
@@ -74,17 +73,16 @@ const tasks = {
         { id: "e1", icon: "🚿", title: "Ménage", desc: "Range ta chambre, fais les poussières et passe l'aspirateur dans ta chambre" },
         { id: "e2", icon: "🍝", title: "Draps", desc: "Enlève les draps de ton lit et refais ton lit avec les draps propres" } 
       ]
-    }
-};
+    };
 
+// Dupliquer pour alya et eden (copie manuelle)
 tasks.alya = JSON.parse(JSON.stringify(tasks.jade));
 tasks.eden = JSON.parse(JSON.stringify(tasks.jade));
 
 // ==========================================
 // STATE
 // ==========================================
-
-let state = {
+var state = {
   date: today(),
   doneDaily: { jade:[], alya:[], eden:[] },
   doneWeekly: { jade:[], alya:[], eden:[] },
@@ -92,23 +90,28 @@ let state = {
   rewardsAvailable: { jade:0, alya:0, eden:0 }
 };
 
-function today(){
-  return new Date().toISOString().split("T")[0];
+function today() {
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth() + 1;
+  var day = now.getDate();
+  if (month < 10) month = '0' + month;
+  if (day < 10) day = '0' + day;
+  return year + '-' + month + '-' + day;
 }
 
 // ==========================================
 // SAVE / LOAD
 // ==========================================
-
-function saveState(){
+function saveState() {
   localStorage.setItem("lsg-state", JSON.stringify(state));
 }
 
-function loadState(){
-  const saved = localStorage.getItem("lsg-state");
-  if(!saved) return;
+function loadState() {
+  var saved = localStorage.getItem("lsg-state");
+  if (!saved) return;
 
-  const parsed = JSON.parse(saved);
+  var parsed = JSON.parse(saved);
 
   state.date = parsed.date || today();
   state.doneDaily = parsed.doneDaily || state.doneDaily;
@@ -120,15 +123,16 @@ function loadState(){
 // ==========================================
 // RESET MINUIT
 // ==========================================
+function checkMidnightReset() {
+  if (state.date !== today()) {
 
-function checkMidnightReset(){
-  if(state.date !== today()){
-
-    ["jade","alya","eden"].forEach(function(chil){
+    var children = ['jade','alya','eden'];
+    for (var idx = 0; idx < children.length; idx++) {
+      var child = children[idx];
       state.rewardsAvailable[child] += state.rewardsTomorrow[child];
       state.rewardsTomorrow[child] = 0;
       state.doneDaily[child] = [];
-    });
+    }
 
     state.date = today();
     saveState();
@@ -138,101 +142,88 @@ function checkMidnightReset(){
 // ==========================================
 // SELECT CHILD
 // ==========================================
-
-function selectChild(child){
+function selectChild(child) {
   renderTasks(child);
 }
 
 // ==========================================
 // RENDER
 // ==========================================
+function renderTasks(child) {
+  var main = document.getElementById("mainContent");
 
-function renderTasks(child){
+  var html = '';
+  html += '<button class="back-btn" onclick="goHome()">';
+  html += '<span class="back-arrow">←</span> Accueil';
+  html += '</button>';
 
-  const main = document.getElementById("mainContent");
+  html += '<div class="reward-box">';
+  html += '⏳ Pour demain : <strong>' + state.rewardsTomorrow[child] + ' min</strong>';
+  html += '</div>';
 
-  main.innerHTML = `
-    <button class="back-btn" onclick="goHome()">
-      <span class="back-arrow">←</span> Accueil
-    </button>
+  html += '<div class="columns">';
+  html += renderColumn(child, 'morning', '🌅 Matin', true);
+  html += renderColumn(child, 'afternoon', '🌤 Après-midi', true);
+  html += renderColumn(child, 'weekly', '📅 Hebdomadaire (+15min)', false);
+  html += '</div>';
 
-    <div class="reward-box">
-      ⏳ Pour demain : <strong> + state.rewardsTomorrow[child] + ' min</strong>
-    </div>
-
-    <div class="columns">
-      ${renderColumn(child,"morning","🌅 Matin",true)}
-      ${renderColumn(child,"afternoon","🌤 Après-midi",true)}
-      ${renderColumn(child,"weekly","📅 Hebdomadaire (+15min)",false)}
-    </div>
-  `;
+  main.innerHTML = html;
 }
 
-function renderColumn(child,period,label,isDaily){
+function renderColumn(child, period, label, isDaily) {
+  var list = isDaily ? state.doneDaily[child] : state.doneWeekly[child];
+  var tasksPeriod = tasks[child][period];
+  var html = '';
 
-  const doneList = isDaily ? state.doneDaily[child] : state.doneWeekly[child];
+  html += '<div class="column">';
+  html += '<h3>' + label + '</h3>';
+  html += '<div class="tasks-list">';
 
-  let html = `
-    <div class="column">
-      <h3>${label}</h3>
-      <div class="tasks-list">
-  `;
+  for (var i = 0; i < tasksPeriod.length; i++) {
+    var task = tasksPeriod[i];
+    var done = list.indexOf(task.id) > -1;
 
-  tasks[child][period].forEach(task=>{
-    const done = doneList.includes(task.id);
+    html += '<div class="task-card ' + child + '-card';
+    if (done) html += ' done glow-done';
+    html += '" onclick="toggleTask(\'' + child + '\',\'' + task.id + '\',\'' + period + '\',' + isDaily + ')">';
 
-    html += `
-      <div class="task-card ${child}-card ${done ? "done glow-done" : ""}"
-           onclick="toggleTask(event,'${child}','${task.id}','${period}',${isDaily})">
-        <div class="task-accent"></div>
-        <div class="task-icon-wrap">${task.icon}</div>
-        <div class="task-content">
-          <div class="task-title">${task.title}</div>
-          <div class="task-desc">${task.desc}</div>
-        </div>
-        <div class="task-action">${done ? "↩" : "✓"}</div>
-      </div>
-    `;
-  });
+    html += '<div class="task-accent"></div>';
+    html += '<div class="task-icon-wrap">' + task.icon + '</div>';
+    html += '<div class="task-content">';
+    html += '<div class="task-title">' + task.title + '</div>';
+    html += '<div class="task-desc">' + task.desc + '</div>';
+    html += '</div>';
+    html += '<div class="task-action">' + (done ? '↩' : '✓') + '</div>';
+    html += '</div>';
+  }
 
-  html += `</div></div>`;
+  html += '</div></div>';
   return html;
 }
 
 // ==========================================
-// TOGGLE
+// TOGGLE TASK
 // ==========================================
-function toggleTask(event,child,id,period,isDaily){
+function toggleTask(child, id, period, isDaily) {
+  var list = isDaily ? state.doneDaily[child] : state.doneWeekly[child];
+  var index = list.indexOf(id);
 
-  const list = isDaily ? state.doneDaily[child] : state.doneWeekly[child];
-  const card = event.currentTarget;
-
-  const index = list.indexOf(id);
-
-  if(index > -1){
-    list.splice(index,1);
-
-    card.classList.remove("done","glow-done");
-    card.querySelector(".task-action").textContent = "✓";
-
-    if(!isDaily){
+  if (index > -1) {
+    // Décocher
+    list.splice(index, 1);
+    if (!isDaily) {
       state.rewardsTomorrow[child] -= WEEKLY_TASK_REWARD;
     }
-
   } else {
-
+    // Cocher
     list.push(id);
-
-    card.classList.add("done","glow-done");
-    card.querySelector(".task-action").textContent = "↩";
-
-    if(!isDaily){
+    if (!isDaily) {
       state.rewardsTomorrow[child] += WEEKLY_TASK_REWARD;
     }
   }
 
-  // ✅ Vérifie fin des tâches daily
-  if(isAllDailyDone(child)){
+  // Vérifier si toutes les daily sont faites
+  if (isAllDailyDone(child)) {
     state.rewardsTomorrow[child] =
       DAILY_REWARD +
       state.doneWeekly[child].length * WEEKLY_TASK_REWARD;
@@ -240,55 +231,46 @@ function toggleTask(event,child,id,period,isDaily){
     spawnConfetti();
   }
 
-  // ✅ Met à jour uniquement le compteur en haut
-  const rewardBox = document.querySelector(".reward-box strong");
-  rewardBox.textContent = state.rewardsTomorrow[child] + " min";
-
   saveState();
+  renderTasks(child);
 }
 
-function isAllDailyDone(child){
-  return state.doneDaily[child].length ===
-    tasks[child].morning.length +
-    tasks[child].afternoon.length;
+function isAllDailyDone(child) {
+  var totalDaily = tasks[child].morning.length + tasks[child].afternoon.length;
+  return state.doneDaily[child].length === totalDaily;
 }
 
 // ==========================================
-// CONFETTI FINAL UNIQUEMENT
+// CONFETTI
 // ==========================================
-
-function spawnConfetti(){
-  confetti({
-    particleCount:180,
-    spread:140,
-    origin:{y:0.6}
-  });
+function spawnConfetti() {
+  if (typeof confetti !== 'undefined') {
+    confetti({
+      particleCount: 180,
+      spread: 140,
+      origin: { y: 0.6 }
+    });
+  }
 }
 
 // ==========================================
 // HOME
 // ==========================================
-
-function goHome(){
-  document.getElementById("mainContent").innerHTML = `
-    <div class="welcome-screen">
-      <div class="welcome-emoji">👋</div>
-      <div class="welcome-title">Bonjour !</div>
-    </div>
-  `;
+function goHome() {
+  document.getElementById("mainContent").innerHTML =
+    '<div class="welcome-screen">' +
+    '<div class="welcome-emoji">👋</div>' +
+    '<div class="welcome-title">Bonjour !</div>' +
+    '</div>';
 }
 
 // ==========================================
 // INIT
 // ==========================================
-
 loadState();
 checkMidnightReset();
 
+// Rendre les fonctions globales
 window.selectChild = selectChild;
 window.toggleTask = toggleTask;
 window.goHome = goHome;
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js');
-}

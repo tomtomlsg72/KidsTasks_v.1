@@ -725,3 +725,20 @@
   to   { transform:none; opacity:1; }
 }
 
+/* ===============================
+   FALLBACK IPAD 2 (NO GRID)
+================================= */
+
+.columns {
+  display: block;
+}
+
+.column {
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.task-card {
+  width: 100%;
+  margin-bottom: 10px;
+}
