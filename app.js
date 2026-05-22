@@ -2,7 +2,7 @@
 // CONFIG
 // ==========================================
 
-const DAILY_REWARD = 45;
+var DAILY_REWARD = 45;
 const WEEKLY_TASK_REWARD = 15;
 
 // ==========================================
@@ -124,7 +124,7 @@ function loadState(){
 function checkMidnightReset(){
   if(state.date !== today()){
 
-    ["jade","alya","eden"].forEach(child=>{
+    ["jade","alya","eden"].forEach(function(chil){
       state.rewardsAvailable[child] += state.rewardsTomorrow[child];
       state.rewardsTomorrow[child] = 0;
       state.doneDaily[child] = [];
@@ -157,7 +157,7 @@ function renderTasks(child){
     </button>
 
     <div class="reward-box">
-      ⏳ Pour demain : <strong>${state.rewardsTomorrow[child]} min</strong>
+      ⏳ Pour demain : <strong> + state.rewardsTomorrow[child] + ' min</strong>
     </div>
 
     <div class="columns">
