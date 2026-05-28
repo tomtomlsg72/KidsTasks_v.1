@@ -10,7 +10,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="images/app-icon-180.png">
   <link rel="apple-touch-startup-image" href="images/splash-1024x768.png" media="(orientation: landscape) and (device-width: 1024px)">
-  <title>Mes tâches quotidiennes</title>
+  <title>LSG Dashboard</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@500;600;700&display=swap"
     rel="stylesheet">
@@ -24,10 +24,9 @@
   <div class="orb orb-3"></div>
 
   <div class="screen">
-    <!-- TOP BAR -->
     <header class="topbar">
       <div class="topbar-logo">
-        &#9889; <span>Mes tâches quotidiennes</span>
+        &#9889; <span>LSG Dashboard</span>
       </div>
       <div style="text-align:right">
         <div class="clock" id="clock">--:--</div>
@@ -35,12 +34,10 @@
       </div>
     </header>
 
-    <!-- HOME PANEL: avatars + semaine + comportements -->
     <div class="home-panel" id="homePanel"></div>
 
     <div class="section-divider"></div>
 
-    <!-- MAIN CONTENT -->
     <main class="main" id="mainContent">
       <div class="welcome-screen">
         <div class="welcome-emoji">👋</div>
@@ -51,95 +48,93 @@
   </div>
 
   <script>
-    // ===== DATA =====
-    const tasks = {
+    var tasks = {
       jade: [
-        { id: 'j1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
-        { id: 'j2', icon: '🥣', title: 'Le p\'tit dèj', desc: 'Prend ton ptit dej, débarrasse ta table et met ta vaisselle dans le lave vaisselle' },
-        { id: 'j3', icon: '🪥', title: 'La toilette', desc: 'Brosse tes dents, nettoie ton visage et le lavabo' },
-        { id: 'j4', icon: '👕', title: 'L\'habillage', desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
-        { id: 'j5', icon: '🛏️', title: 'La chambre', desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
-        { id: 'j6', icon: '🍪', title: 'Le gouter', desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
-        { id: 'j7', icon: '📒', title: 'Les leçons', desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
-        { id: 'j8', icon: '🚿', title: 'La douche', desc: 'Garde ton pantalon si il n\'est pas sale et prends ta douche sans jouer avec l\'eau' },
-        { id: 'j9', icon: '🍝', title: 'Le diner', desc: 'Met et debarrasse la table calmement et sans raler' },
-        { id: 'j10', icon: '🪥', title: 'Les dents', desc: 'Brosse tes dents, nettoie ton lavabo' },
-        { id: 'j11', icon: '😴', title: 'Le coucher', desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
+        { id: 'j1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fen\u00eatre pour a\u00e9rer' },
+        { id: 'j2', icon: '\uD83E\uDD63', title: "Le p'tit d\u00e8j", desc: 'Prend ton ptit dej, d\u00e9barrasse ta table et met ta vaisselle dans le lave vaisselle' },
+        { id: 'j3', icon: '\uD83E\uDDF5', title: 'La toilette', desc: 'Brosse tes dents, nettoie ton visage et le lavabo' },
+        { id: 'j4', icon: '\uD83D\uDC55', title: "L'habillage", desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
+        { id: 'j5', icon: '\uD83D\uDECF\uFE0F', title: 'La chambre', desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
+        { id: 'j6', icon: '\uD83C\uDF6A', title: 'Le gouter', desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
+        { id: 'j7', icon: '\uD83D\uDCD2', title: 'Les le\u00e7ons', desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
+        { id: 'j8', icon: '\uD83D\uDEBF', title: 'La douche', desc: "Garde ton pantalon si il n'est pas sale et prends ta douche sans jouer avec l'eau" },
+        { id: 'j9', icon: '\uD83C\uDF5D', title: 'Le diner', desc: 'Met et debarrasse la table calmement et sans raler' },
+        { id: 'j10', icon: '\uD83E\uDDF5', title: 'Les dents', desc: 'Brosse tes dents, nettoie ton lavabo' },
+        { id: 'j11', icon: '\uD83D\uDE34', title: 'Le coucher', desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
       ],
       alya: [
-        { id: 'a1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
-        { id: 'a2', icon: '🥣', title: 'Le p\'tit dèj', desc: 'Prend ton ptit dej, débarrasse ta table et met ta vaisselle dans le lave vaisselle' },
-        { id: 'a3', icon: '🪥', title: 'La toilette', desc: 'Brosse tes dents, nettoie ton visage et le lavabo' },
-        { id: 'a4', icon: '👕', title: 'L\'habillage', desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
-        { id: 'a5', icon: '🛏️', title: 'La chambre', desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
-        { id: 'a6', icon: '🍪', title: 'Le gouter', desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
-        { id: 'a7', icon: '📒', title: 'Les leçons', desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
-        { id: 'a8', icon: '🚿', title: 'La douche', desc: 'Garde ton pantalon si il n\'est pas sale et prends ta douche sans jouer avec l\'eau' },
-        { id: 'a9', icon: '🍝', title: 'Le diner', desc: 'Met et debarrasse la table calmement et sans raler' },
-        { id: 'a10', icon: '🪥', title: 'Les dents', desc: 'Brosse tes dents, nettoie ton lavabo' },
-        { id: 'a11', icon: '😴', title: 'Le coucher', desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
+        { id: 'a1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fen\u00eatre pour a\u00e9rer' },
+        { id: 'a2', icon: '\uD83E\uDD63', title: "Le p'tit d\u00e8j", desc: 'Prend ton ptit dej, d\u00e9barrasse ta table et met ta vaisselle dans le lave vaisselle' },
+        { id: 'a3', icon: '\uD83E\uDDF5', title: 'La toilette', desc: 'Brosse tes dents, nettoie ton visage et le lavabo' },
+        { id: 'a4', icon: '\uD83D\uDC55', title: "L'habillage", desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
+        { id: 'a5', icon: '\uD83D\uDECF\uFE0F', title: 'La chambre', desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
+        { id: 'a6', icon: '\uD83C\uDF6A', title: 'Le gouter', desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
+        { id: 'a7', icon: '\uD83D\uDCD2', title: 'Les le\u00e7ons', desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
+        { id: 'a8', icon: '\uD83D\uDEBF', title: 'La douche', desc: "Garde ton pantalon si il n'est pas sale et prends ta douche sans jouer avec l'eau" },
+        { id: 'a9', icon: '\uD83C\uDF5D', title: 'Le diner', desc: 'Met et debarrasse la table calmement et sans raler' },
+        { id: 'a10', icon: '\uD83E\uDDF5', title: 'Les dents', desc: 'Brosse tes dents, nettoie ton lavabo' },
+        { id: 'a11', icon: '\uD83D\uDE34', title: 'Le coucher', desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
       ],
       eden: [
-        { id: 'e1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
-        { id: 'e2', icon: '🥣', title: 'Le p\'tit dèj', desc: 'Prend ton ptit dej, débarrasse ta table et met ta vaisselle dans le lave vaisselle' },
-        { id: 'e3', icon: '🪥', title: 'La toilette', desc: 'Brosse tes dents, nettoie ton visage et le lavabo' },
-        { id: 'e4', icon: '👕', title: 'L\'habillage', desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
-        { id: 'e5', icon: '🛏️', title: 'La chambre', desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
-        { id: 'e6', icon: '🍪', title: 'Le gouter', desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
-        { id: 'e7', icon: '📒', title: 'Les leçons', desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
-        { id: 'e8', icon: '🚿', title: 'La douche', desc: 'Garde ton pantalon si il n\'est pas sale et prends ta douche sans jouer avec l\'eau' },
-        { id: 'e9', icon: '🍝', title: 'Le diner', desc: 'Met et debarrasse la table calmement et sans raler' },
-        { id: 'e10', icon: '🪥', title: 'Les dents', desc: 'Brosse tes dents, nettoie ton lavabo' },
-        { id: 'e11', icon: '😴', title: 'Le coucher', desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
+        { id: 'e1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fen\u00eatre pour a\u00e9rer' },
+        { id: 'e2', icon: '\uD83E\uDD63', title: "Le p'tit d\u00e8j", desc: 'Prend ton ptit dej, d\u00e9barrasse ta table et met ta vaisselle dans le lave vaisselle' },
+        { id: 'e3', icon: '\uD83E\uDDF5', title: 'La toilette', desc: 'Brosse tes dents, nettoie ton visage et le lavabo' },
+        { id: 'e4', icon: '\uD83D\uDC55', title: "L'habillage", desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
+        { id: 'e5', icon: '\uD83D\uDECF\uFE0F', title: 'La chambre', desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
+        { id: 'e6', icon: '\uD83C\uDF6A', title: 'Le gouter', desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
+        { id: 'e7', icon: '\uD83D\uDCD2', title: 'Les le\u00e7ons', desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
+        { id: 'e8', icon: '\uD83D\uDEBF', title: 'La douche', desc: "Garde ton pantalon si il n'est pas sale et prends ta douche sans jouer avec l'eau" },
+        { id: 'e9', icon: '\uD83C\uDF5D', title: 'Le diner', desc: 'Met et debarrasse la table calmement et sans raler' },
+        { id: 'e10', icon: '\uD83E\uDDF5', title: 'Les dents', desc: 'Brosse tes dents, nettoie ton lavabo' },
+        { id: 'e11', icon: '\uD83D\uDE34', title: 'Le coucher', desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
       ],
       mady: [
-        { id: 'm1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fenêtre pour aérer' },
-        { id: 'm2', icon: '🥣', title: 'Le p\'tit dèj', desc: 'Prend ton ptit dej, débarrasse ta table et met ta vaisselle dans le lave vaisselle' },
-        { id: 'm3', icon: '🪥', title: 'La toilette', desc: 'Brosse tes dents, nettoie ton visage et le lavabo' },
-        { id: 'm4', icon: '👕', title: 'L\'habillage', desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
-        { id: 'm5', icon: '🛏️', title: 'La chambre', desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
-        { id: 'm6', icon: '🍪', title: 'Le gouter', desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
-        { id: 'm7', icon: '📒', title: 'Les leçons', desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
-        { id: 'm8', icon: '🚿', title: 'La douche', desc: 'Garde ton pantalon si il n\'est pas sale et prends ta douche sans jouer avec l\'eau' },
-        { id: 'm9', icon: '🍝', title: 'Le diner', desc: 'Met et debarrasse la table calmement et sans raler' },
-        { id: 'm10', icon: '🪥', title: 'Les dents', desc: 'Brosse tes dents, nettoie ton lavabo' },
-        { id: 'm11', icon: '😴', title: 'Le coucher', desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
+        { id: 'm1', icon: '🌞', title: 'Le lever', desc: 'Ouvre tes volets en tirant doucement sur la chainette et ouvre ta fen\u00eatre pour a\u00e9rer' },
+        { id: 'm2', icon: '\uD83E\uDD63', title: "Le p'tit d\u00e8j", desc: 'Prend ton ptit dej, d\u00e9barrasse ta table et met ta vaisselle dans le lave vaisselle' },
+        { id: 'm3', icon: '\uD83E\uDDF5', title: 'La toilette', desc: 'Brosse tes dents, nettoie ton visage et le lavabo' },
+        { id: 'm4', icon: '\uD83D\uDC55', title: "L'habillage", desc: 'Habille toi rapidement, met ton pyjama au sale ou range le' },
+        { id: 'm5', icon: '\uD83D\uDECF\uFE0F', title: 'La chambre', desc: 'Fais ton lit, ramasse ce qui traine par terre et ferme ta fenetre' },
+        { id: 'm6', icon: '\uD83C\uDF6A', title: 'Le gouter', desc: 'Lave tes mains, prends ton gouter et nettoie la table' },
+        { id: 'm7', icon: '\uD83D\uDCD2', title: 'Les le\u00e7ons', desc: 'Fais tes devoirs serieusement et prepare ton sac pour le lendemain' },
+        { id: 'm8', icon: '\uD83D\uDEBF', title: 'La douche', desc: "Garde ton pantalon si il n'est pas sale et prends ta douche sans jouer avec l'eau" },
+        { id: 'm9', icon: '\uD83C\uDF5D', title: 'Le diner', desc: 'Met et debarrasse la table calmement et sans raler' },
+        { id: 'm10', icon: '\uD83E\uDDF5', title: 'Les dents', desc: 'Brosse tes dents, nettoie ton lavabo' },
+        { id: 'm11', icon: '\uD83D\uDE34', title: 'Le coucher', desc: 'Range ta chambre si besoin et prepare ta tenue pour le lendemain' },
       ]
     };
 
-    const weeklyTasks = {
+    var weeklyTasks = {
       jade: [
-        { id: 'j_w1', icon: '🧽', title: 'Vider le lave-vaisselle', desc: 'Vide le lave-vaisselle et range tout à sa place' },
-        { id: 'j_w2', icon: '🧹', title: 'Grand ménage dans sa chambre', desc: 'Passe l\'aspirateur, dépoussière et range tout' },
-        { id: 'j_w3', icon: '🧺', title: 'Changer les draps de mon lit', desc: 'Enlève les draps sales et mets des draps propres' },
+        { id: 'j_w1', icon: '\uD83E\uDDFD', title: 'Vider le lave-vaisselle', desc: 'Vide le lave-vaisselle et range tout \u00e0 sa place' },
+        { id: 'j_w2', icon: '\uD83E\uDDF9', title: 'Grand m\u00e9nage dans sa chambre', desc: "Passe l'aspirateur, d\u00e9poussi\u00e8re et range tout" },
+        { id: 'j_w3', icon: '\uD83E\uDDFA', title: 'Changer les draps de mon lit', desc: 'Enl\u00e8ve les draps sales et mets des draps propres' },
       ],
       alya: [
-        { id: 'a_w1', icon: '🧽', title: 'Vider le lave-vaisselle', desc: 'Vide le lave-vaisselle et range tout à sa place' },
-        { id: 'a_w2', icon: '🧹', title: 'Grand ménage dans sa chambre', desc: 'Passe l\'aspirateur, dépoussière et range tout' },
-        { id: 'a_w3', icon: '🧺', title: 'Changer les draps de mon lit', desc: 'Enlève les draps sales et mets des draps propres' },
+        { id: 'a_w1', icon: '\uD83E\uDDFD', title: 'Vider le lave-vaisselle', desc: 'Vide le lave-vaisselle et range tout \u00e0 sa place' },
+        { id: 'a_w2', icon: '\uD83E\uDDF9', title: 'Grand m\u00e9nage dans sa chambre', desc: "Passe l'aspirateur, d\u00e9poussi\u00e8re et range tout" },
+        { id: 'a_w3', icon: '\uD83E\uDDFA', title: 'Changer les draps de mon lit', desc: 'Enl\u00e8ve les draps sales et mets des draps propres' },
       ],
       eden: [
-        { id: 'e_w1', icon: '🧽', title: 'Vider le lave-vaisselle', desc: 'Vide le lave-vaisselle et range tout à sa place' },
-        { id: 'e_w2', icon: '🧹', title: 'Grand ménage dans sa chambre', desc: 'Passe l\'aspirateur, dépoussière et range tout' },
-        { id: 'e_w3', icon: '🧺', title: 'Changer les draps de mon lit', desc: 'Enlève les draps sales et mets des draps propres' },
+        { id: 'e_w1', icon: '\uD83E\uDDFD', title: 'Vider le lave-vaisselle', desc: 'Vide le lave-vaisselle et range tout \u00e0 sa place' },
+        { id: 'e_w2', icon: '\uD83E\uDDF9', title: 'Grand m\u00e9nage dans sa chambre', desc: "Passe l'aspirateur, d\u00e9poussi\u00e8re et range tout" },
+        { id: 'e_w3', icon: '\uD83E\uDDFA', title: 'Changer les draps de mon lit', desc: 'Enl\u00e8ve les draps sales et mets des draps propres' },
       ],
       mady: [
-        { id: 'm_w1', icon: '🧽', title: 'Vider le lave-vaisselle', desc: 'Vide le lave-vaisselle et range tout à sa place' },
-        { id: 'm_w2', icon: '🧹', title: 'Grand ménage dans sa chambre', desc: 'Passe l\'aspirateur, dépoussière et range tout' },
-        { id: 'm_w3', icon: '🧺', title: 'Changer les draps de mon lit', desc: 'Enlève les draps sales et mets des draps propres' },
+        { id: 'm_w1', icon: '\uD83E\uDDFD', title: 'Vider le lave-vaisselle', desc: 'Vide le lave-vaisselle et range tout \u00e0 sa place' },
+        { id: 'm_w2', icon: '\uD83E\uDDF9', title: 'Grand m\u00e9nage dans sa chambre', desc: "Passe l'aspirateur, d\u00e9poussi\u00e8re et range tout" },
+        { id: 'm_w3', icon: '\uD83E\uDDFA', title: 'Changer les draps de mon lit', desc: 'Enl\u00e8ve les draps sales et mets des draps propres' },
       ]
     };
 
-    const colors = { jade: '#00e5a0', alya: '#7b61ff', eden: '#ff6eb4', mady: '#ffaa33' };
-    const glows = { jade: 'rgba(0,229,160,0.25)', alya: 'rgba(123,97,255,0.25)', eden: 'rgba(255,110,180,0.25)', mady: 'rgba(255,170,51,0.25)' };
-    const children = ['jade', 'alya', 'eden', 'mady'];
-    const dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
-    const behavTypes = ['violence', 'respect', 'betises'];
-    const behavLabels = { violence: 'Violence', respect: 'Respect', betises: 'Bêtises' };
+    var colors = { jade: '#00e5a0', alya: '#7b61ff', eden: '#ff6eb4', mady: '#ffaa33' };
+    var glows = { jade: 'rgba(0,229,160,0.25)', alya: 'rgba(123,97,255,0.25)', eden: 'rgba(255,110,180,0.25)', mady: 'rgba(255,170,51,0.25)' };
+    var children = ['jade', 'alya', 'eden', 'mady'];
+    var dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+    var behavTypes = ['violence', 'respect', 'betises'];
+    var behavLabels = { violence: 'Violence', respect: 'Respect', betises: 'B\u00eatises' };
 
-    let SECRET_CODE = '1234';
+    var SECRET_CODE = '1234';
 
-    // Polyfill padStart pour iOS 9
     if (!String.prototype.padStart) {
       String.prototype.padStart = function (len, pad) {
         var s = String(this);
@@ -148,37 +143,28 @@
       };
     }
 
-    let state = {
+    var state = {
       active: null,
       done: { jade: new Set(), alya: new Set(), eden: new Set(), mady: new Set() },
-      unlocked: false // admin mode for behavior removal
+      unlocked: false
     };
 
-    // ===== DAY LOG (localStorage) =====
-    let dayLog = {};
+    var dayLog = {};
 
     function loadDayLog() {
-      try {
-        const raw = localStorage.getItem('lsg_daylog');
-        if (raw) dayLog = JSON.parse(raw);
-      } catch (e) { dayLog = {}; }
+      try { var raw = localStorage.getItem('lsg_daylog'); if (raw) dayLog = JSON.parse(raw); } catch (e) { dayLog = {}; }
     }
-
-    function saveDayLog() {
-      localStorage.setItem('lsg_daylog', JSON.stringify(dayLog));
-    }
+    function saveDayLog() { localStorage.setItem('lsg_daylog', JSON.stringify(dayLog)); }
 
     function getTodayKey() {
-      const d = new Date();
+      var d = new Date();
       return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
     }
 
     function getTodayData(child) {
-      const key = getTodayKey();
+      var key = getTodayKey();
       if (!dayLog[key]) dayLog[key] = {};
-      if (!dayLog[key][child]) {
-        dayLog[key][child] = { allDone: false, behaviors: { violence: 0, respect: 0, betises: 0 } };
-      }
+      if (!dayLog[key][child]) dayLog[key][child] = { allDone: false, behaviors: { violence: 0, respect: 0, betises: 0 } };
       return dayLog[key][child];
     }
 
@@ -188,166 +174,95 @@
     }
 
     function setAllDone(child) {
-      const data = getTodayData(child);
+      var data = getTodayData(child);
       data.allDone = true;
       saveDayLog();
     }
 
-    // ===== WEEKLY LOG (localStorage) =====
-    let weeklyLog = {};
+    var weeklyLog = {};
 
     function getWeekKey() {
-      const d = new Date();
-      const day = d.getDay();
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-      const monday = new Date(d.setDate(diff));
-      const y = monday.getFullYear();
-      const m = String(monday.getMonth() + 1).padStart(2, '0');
-      const dd = String(monday.getDate()).padStart(2, '0');
-      return y + '-' + m + '-' + dd;
+      var d = new Date(), day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1);
+      var monday = new Date(d.setDate(diff));
+      return monday.getFullYear() + '-' + String(monday.getMonth() + 1).padStart(2, '0') + '-' + String(monday.getDate()).padStart(2, '0');
     }
 
     function getWeekData(child) {
-      const key = getWeekKey();
+      var key = getWeekKey();
       if (!weeklyLog[key]) weeklyLog[key] = {};
       if (!weeklyLog[key][child]) weeklyLog[key][child] = { done: [] };
       return weeklyLog[key][child];
     }
 
-    function loadWeeklyLog() {
-      try { const raw = localStorage.getItem('lsg_weeklylog'); if (raw) weeklyLog = JSON.parse(raw); } catch (e) { weeklyLog = {}; }
-    }
-
-    function saveWeeklyLog() {
-      localStorage.setItem('lsg_weeklylog', JSON.stringify(weeklyLog));
-    }
+    function loadWeeklyLog() { try { var raw = localStorage.getItem('lsg_weeklylog'); if (raw) weeklyLog = JSON.parse(raw); } catch (e) { weeklyLog = {}; } }
+    function saveWeeklyLog() { localStorage.setItem('lsg_weeklylog', JSON.stringify(weeklyLog)); }
 
     function getTimeEarned(child) {
-      const data = getTodayData(child);
-      let earned = 0;
+      var data = getTodayData(child), earned = 0;
       if (data.allDone) {
-        const total = data.behaviors.violence + data.behaviors.respect + data.behaviors.betises;
+        var total = data.behaviors.violence + data.behaviors.respect + data.behaviors.betises;
         earned += Math.max(0, 45 - total * 5);
       }
-      const weekData = getWeekData(child);
-      earned += weekData.done.length * 15;
+      earned += getWeekData(child).done.length * 15;
       return earned;
     }
 
     function addBehavior(child, type) {
-      const data = getTodayData(child);
+      var data = getTodayData(child);
       data.behaviors[type] = (data.behaviors[type] || 0) + 1;
-      saveDayLog();
-      renderHomePanel();
+      saveDayLog(); renderHomePanel();
     }
 
     function removeBehavior(child, type) {
-      const data = getTodayData(child);
-      if (data.behaviors[type] > 0) {
-        data.behaviors[type]--;
-        saveDayLog();
-        renderHomePanel();
-      }
+      var data = getTodayData(child);
+      if (data.behaviors[type] > 0) { data.behaviors[type]--; saveDayLog(); renderHomePanel(); }
     }
 
-    // ===== WEEK CALC =====
     function getWeekDays() {
-      const now = new Date();
-      const day = now.getDay();
-      const diffToMonday = (day === 0 ? -6 : 1 - day);
-      const monday = new Date(now);
-      monday.setDate(now.getDate() + diffToMonday);
-
-      const week = [];
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(monday);
-        d.setDate(monday.getDate() + i);
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const dd = String(d.getDate()).padStart(2, '0');
-        const key = y + '-' + m + '-' + dd;
-        const isToday = key === getTodayKey();
-        week.push({ label: dayLabels[i], key: key, isToday: isToday });
+      var now = new Date(), day = now.getDay(), diff = (day === 0 ? -6 : 1 - day);
+      var monday = new Date(now); monday.setDate(now.getDate() + diff);
+      var week = [];
+      for (var i = 0; i < 7; i++) {
+        var d = new Date(monday); d.setDate(monday.getDate() + i);
+        var key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        week.push({ label: dayLabels[i], key: key, isToday: key === getTodayKey() });
       }
       return week;
     }
 
-    // ===== CLOCK =====
     function updateClock() {
-      const now = new Date();
-      document.getElementById('clock').textContent =
-        now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-      const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-      const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
-      document.getElementById('dateLabel').textContent =
-        days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()];
+      var now = new Date();
+      document.getElementById('clock').textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+      var days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+      var months = ['Jan', 'F\u00e9v', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Ao\u00fb', 'Sep', 'Oct', 'Nov', 'D\u00e9c'];
+      document.getElementById('dateLabel').textContent = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()];
     }
     updateClock();
     setInterval(updateClock, 1000);
 
-    // ===== RENDER HOME PANEL =====
     function renderHomePanel() {
-      const panel = document.getElementById('homePanel');
-      const week = getWeekDays();
-      let html = '';
-
+      var panel = document.getElementById('homePanel'), week = getWeekDays(), html = '';
       children.forEach(function (child) {
-        var todayData = getTodayData(child);
-        var color = colors[child];
-
-        // Weekly day cells
-        var daysHtml = '';
+        var todayData = getTodayData(child), color = colors[child], daysHtml = '', behHtml = '';
         week.forEach(function (w) {
-          var dayData = getDayData(w.key, child);
-          var done = dayData && dayData.allDone && !w.isToday;
-          var classes = 'day-cell' + (w.isToday ? ' today' : '') + (done ? ' done' : '');
-          daysHtml += '<div class="' + classes + '">' + w.label + '</div>';
+          var dayData = getDayData(w.key, child), done = dayData && dayData.allDone && !w.isToday;
+          daysHtml += '<div class="day-cell' + (w.isToday ? ' today' : '') + (done ? ' done' : '') + '">' + w.label + '</div>';
         });
-
-        // Behavior buttons
-        var behHtml = '';
         behavTypes.forEach(function (type) {
           var count = todayData.behaviors[type] || 0;
-          behHtml += '<button class="beh-btn" data-child="' + child + '" data-type="' + type + '" onclick="onBehaviorClick(\'' + child + '\',\'' + type + '\')">' +
-            '<span class="beh-label">' + behavLabels[type] + '</span>' +
-            '<span class="beh-count" id="beh-' + child + '-' + type + '">' + count + '</span>' +
-            '</button>';
+          behHtml += '<button class="beh-btn" data-child="' + child + '" data-type="' + type + '" onclick="onBehaviorClick(\'' + child + '\',\'' + type + '\')"><span class="beh-label">' + behavLabels[type] + '</span><span class="beh-count" id="beh-' + child + '-' + type + '">' + count + '</span></button>';
         });
-
-        var earned = getTimeEarned(child);
-        var msgHtml = earned > 0
-          ? '<div class="time-msg">Tu as gagn\u00e9 <strong>' + earned + ' min</strong> pour demain !</div>'
-          : '';
-
-        html += '<div class="child-panel" data-child="' + child + '">' +
-          '<div class="avatar-card ' + child + '" data-child="' + child + '" onclick="selectChild(\'' + child + '\')">' +
-          '<div class="avatar-ring"><div class="avatar-inner"><img src="images/' + child + '.png" alt="' + child + '"></div>' +
-          '<div class="avatar-badge" id="badge-' + child + '"></div></div>' +
-          '<div class="avatar-name">' + (child.charAt(0).toUpperCase() + child.slice(1)) + '</div>' +
-          '</div>' +
-          '<div class="child-week">' + daysHtml + '</div>' +
-          '<div class="child-behaviors">' + behHtml + '</div>' +
-          msgHtml +
-          '</div>';
+        var earned = getTimeEarned(child), msgHtml = earned > 0 ? '<div class="time-msg">Tu as gagn\u00e9 <strong>' + earned + ' min</strong> pour demain !</div>' : '';
+        html += '<div class="child-panel" data-child="' + child + '"><div class="avatar-card ' + child + '" data-child="' + child + '" onclick="selectChild(\'' + child + '\')"><div class="avatar-ring"><div class="avatar-inner"><img src="images/' + child + '.png" alt="' + child + '"></div><div class="avatar-badge" id="badge-' + child + '"></div></div><div class="avatar-name">' + (child.charAt(0).toUpperCase() + child.slice(1)) + '</div></div><div class="child-week">' + daysHtml + '</div><div class="child-behaviors">' + behHtml + '</div>' + msgHtml + '</div>';
       });
-
-      // Admin lock
-      const lockIcon = state.unlocked ? '🔓' : '🔒';
-      html += '<div class="admin-bar"><button class="admin-btn" onclick="toggleAdmin()">' + lockIcon + '</button></div>';
-
+      html += '<div class="admin-bar"><button class="admin-btn" onclick="toggleAdmin()">' + (state.unlocked ? '\uD83D\uDD13' : '\uD83D\uDD12') + '</button></div>';
       panel.innerHTML = html;
     }
 
-    // ===== BEHAVIOR CLICK =====
     function onBehaviorClick(child, type) {
-      if (state.unlocked) {
-        removeBehavior(child, type);
-      } else {
-        addBehavior(child, type);
-      }
+      if (state.unlocked) removeBehavior(child, type); else addBehavior(child, type);
     }
 
-    // ===== ADMIN TOGGLE =====
     function toggleAdmin() {
       if (state.unlocked) {
         state.unlocked = false;
@@ -356,212 +271,106 @@
         if (state.active) renderTasks(state.active);
         return;
       }
-      const code = prompt('Code secret :');
-      if (code === SECRET_CODE) {
+      if (prompt('Code secret :') === SECRET_CODE) {
         state.unlocked = true;
         document.querySelector('.screen').classList.add('unlocked');
         renderHomePanel();
         if (state.active) renderTasks(state.active);
-      } else {
-        alert('Code incorrect');
-      }
+      } else { alert('Code incorrect'); }
     }
 
-    // ===== SELECT CHILD =====
     function selectChild(child) {
       state.active = child;
-
       document.documentElement.style.setProperty('--active-color', colors[child]);
       document.documentElement.style.setProperty('--active-glow', glows[child]);
       document.querySelector('.orb-1').style.background = colors[child];
       document.querySelector('.orb-2').style.background = colors[child];
-
       [].forEach.call(document.querySelectorAll('.avatar-card'), function (c) { c.classList.remove('active'); });
       document.querySelector('.avatar-card.' + child).classList.add('active');
-
       renderTasks(child);
     }
 
-    // ===== TASK CARD HELPERS =====
     function buildDailyCardHtml(child, task) {
-      var isDone = state.done[child].has(task.id);
-      var clickHandler;
-      if (isDone && state.unlocked) {
-        clickHandler = 'uncompleteTask(\'' + child + '\',\'' + task.id + '\')';
-      } else if (!isDone) {
-        clickHandler = 'completeTask(\'' + child + '\',\'' + task.id + '\')';
-      } else {
-        clickHandler = '';
-      }
-      return '<div class="task-card ' + child + '-card' + (isDone ? ' done' : '') + '" onclick="' + clickHandler + '">' +
-        '<div class="task-icon-wrap">' + task.icon + '</div>' +
-        '<div class="task-content">' +
-        '<div class="task-title">' + task.title + '</div>' +
-        '<div class="task-desc">' + task.desc + '</div>' +
-        '</div>' +
-        '<div class="task-action">\u2713</div>' +
-        '</div>';
+      var isDone = state.done[child].has(task.id), ch;
+      if (isDone && state.unlocked) ch = 'uncompleteTask(\'' + child + '\',\'' + task.id + '\')';
+      else if (!isDone) ch = 'completeTask(\'' + child + '\',\'' + task.id + '\')';
+      else ch = '';
+      return '<div class="task-card ' + child + '-card' + (isDone ? ' done' : '') + '" onclick="' + ch + '"><div class="task-icon-wrap">' + task.icon + '</div><div class="task-content"><div class="task-title">' + task.title + '</div><div class="task-desc">' + task.desc + '</div></div><div class="task-action">\u2713</div></div>';
     }
 
     function buildWeeklyCardHtml(child, task) {
-      var weekData = getWeekData(child);
-      var isDone = weekData.done.indexOf(task.id) !== -1;
-      var clickHandler;
-      if (isDone && state.unlocked) {
-        clickHandler = 'uncompleteWeeklyTask(\'' + child + '\',\'' + task.id + '\')';
-      } else if (!isDone) {
-        clickHandler = 'completeWeeklyTask(\'' + child + '\',\'' + task.id + '\')';
-      } else {
-        clickHandler = '';
-      }
-      return '<div class="task-card ' + child + '-card' + (isDone ? ' done' : '') + '" onclick="' + clickHandler + '">' +
-        '<div class="task-icon-wrap">' + task.icon + '</div>' +
-        '<div class="task-content">' +
-        '<div class="task-title">' + task.title + '</div>' +
-        '<div class="task-desc">' + task.desc + '</div>' +
-        '</div>' +
-        '<span class="task-time-badge">+15 min</span>' +
-        '<div class="task-action">\u2713</div>' +
-        '</div>';
+      var weekData = getWeekData(child), isDone = weekData.done.indexOf(task.id) !== -1, ch;
+      if (isDone && state.unlocked) ch = 'uncompleteWeeklyTask(\'' + child + '\',\'' + task.id + '\')';
+      else if (!isDone) ch = 'completeWeeklyTask(\'' + child + '\',\'' + task.id + '\')';
+      else ch = '';
+      return '<div class="task-card ' + child + '-card' + (isDone ? ' done' : '') + '" onclick="' + ch + '"><div class="task-icon-wrap">' + task.icon + '</div><div class="task-content"><div class="task-title">' + task.title + '</div><div class="task-desc">' + task.desc + '</div></div><span class="task-time-badge">+15 min</span><div class="task-action">\u2713</div></div>';
     }
 
-    // ===== RENDER TASKS =====
     function renderTasks(child) {
-      const main = document.getElementById('mainContent');
-      const daily = tasks[child];
-      const weeklies = weeklyTasks[child];
-      const totalDaily = daily.length;
-      const doneCount = state.done[child].size;
-      const allDailyDone = doneCount === totalDaily;
-
-      const progress = Math.round((doneCount / totalDaily) * 100);
-      const firstName = child.charAt(0).toUpperCase() + child.slice(1);
-      const morning = daily.slice(0, 5);
-      const afternoon = daily.slice(5);
-
-      let html = '<button class="back-btn" onclick="goHome()"><span class="back-arrow">\u2190</span> Accueil</button>';
-
-      if (allDailyDone) {
-        html += '<div class="all-done-banner">' +
-          '<span class="all-done-trophy-sm">\uD83C\uDFC6</span>' +
-          ' Bravo ' + firstName + ' ! Toutes les t\u00e2ches du jour sont faites \u2728' +
-          '</div>';
-      }
-
-      html += '<div class="tasks-header">' +
-        '<div class="tasks-greeting">Salut <span class="name-colored ' + child + '">' + firstName + '</span> \uD83D\uDC4B</div>' +
-        '<div class="progress-pill">' +
-        '<div class="progress-track"><div class="progress-fill" style="width:' + progress + '%"></div></div>' +
-        '<div class="progress-label">' + doneCount + '/' + totalDaily + '</div>' +
-        '</div>' +
-        '</div>';
-
-      // Morning section
+      var main = document.getElementById('mainContent'), daily = tasks[child], weeklies = weeklyTasks[child], total = daily.length, done = state.done[child].size, allDone = done === total;
+      var prog = Math.round((done / total) * 100), name = child.charAt(0).toUpperCase() + child.slice(1), morning = daily.slice(0, 5), afternoon = daily.slice(5);
+      var html = '<button class="back-btn" onclick="goHome()"><span class="back-arrow">\u2190</span> Accueil</button>';
+      if (allDone) html += '<div class="all-done-banner"><span class="all-done-trophy-sm">\uD83C\uDFC6</span> Bravo ' + name + ' ! Toutes les t\u00e2ches du jour sont faites \u2728</div>';
+      html += '<div class="tasks-header"><div class="tasks-greeting">Salut <span class="name-colored ' + child + '">' + name + '</span> \uD83D\uDC4B</div><div class="progress-pill"><div class="progress-track"><div class="progress-fill" style="width:' + prog + '%"></div></div><div class="progress-label">' + done + '/' + total + '</div></div></div>';
       html += '<div class="task-section"><div class="task-section-header">\u2600\uFE0F Matin</div><div class="task-section-inner">';
       morning.forEach(function (t) { html += buildDailyCardHtml(child, t); });
-      html += '</div></div>';
-
-      // Afternoon section
-      html += '<div class="task-section"><div class="task-section-header">\uD83C\uDF24\uFE0F Apr\u00e8s-midi</div><div class="task-section-inner">';
+      html += '</div></div><div class="task-section"><div class="task-section-header">\uD83C\uDF24\uFE0F Apr\u00e8s-midi</div><div class="task-section-inner">';
       afternoon.forEach(function (t) { html += buildDailyCardHtml(child, t); });
-      html += '</div></div>';
-
-      // Weekly section
-      html += '<div class="task-section-weekly"><div class="task-section-header">\uD83D\uDCC5 1 fois par semaine</div><div class="task-section-inner">';
+      html += '</div></div><div class="task-section-weekly"><div class="task-section-header">\uD83D\uDCC5 1 fois par semaine</div><div class="task-section-inner">';
       weeklies.forEach(function (t) { html += buildWeeklyCardHtml(child, t); });
       html += '</div></div>';
-
       main.innerHTML = html;
       updateBadge(child);
     }
 
-    // ===== COMPLETE / UNCOMPLETE TASK =====
     function completeTask(child, taskId) {
       if (state.done[child].has(taskId)) return;
       state.done[child].add(taskId);
-
-      if (state.done[child].size === tasks[child].length) {
-        setAllDone(child);
-        renderHomePanel();
-      }
-
-      renderTasks(child);
-      updateBadge(child);
+      if (state.done[child].size === tasks[child].length) { setAllDone(child); renderHomePanel(); }
+      renderTasks(child); updateBadge(child);
     }
 
     function uncompleteTask(child, taskId) {
-      if (!state.unlocked) return;
-      if (!state.done[child].has(taskId)) return;
+      if (!state.unlocked || !state.done[child].has(taskId)) return;
       state.done[child].delete(taskId);
-
-      const data = getTodayData(child);
-      data.allDone = false;
-      saveDayLog();
-
-      renderHomePanel();
-      renderTasks(child);
-      updateBadge(child);
+      getTodayData(child).allDone = false; saveDayLog();
+      renderHomePanel(); renderTasks(child); updateBadge(child);
     }
 
     function completeWeeklyTask(child, taskId) {
-      var weekData = getWeekData(child);
-      if (weekData.done.indexOf(taskId) !== -1) return;
-      weekData.done.push(taskId);
-      saveWeeklyLog();
-      renderHomePanel();
-      renderTasks(child);
+      var wd = getWeekData(child);
+      if (wd.done.indexOf(taskId) !== -1) return;
+      wd.done.push(taskId); saveWeeklyLog();
+      renderHomePanel(); renderTasks(child);
     }
 
     function uncompleteWeeklyTask(child, taskId) {
       if (!state.unlocked) return;
-      var weekData = getWeekData(child);
-      var idx = weekData.done.indexOf(taskId);
+      var wd = getWeekData(child), idx = wd.done.indexOf(taskId);
       if (idx === -1) return;
-      weekData.done.splice(idx, 1);
-      saveWeeklyLog();
-      renderHomePanel();
-      renderTasks(child);
+      wd.done.splice(idx, 1); saveWeeklyLog();
+      renderHomePanel(); renderTasks(child);
     }
 
-    // ===== BADGE =====
     function updateBadge(child) {
-      var remaining = tasks[child].length - state.done[child].size;
-      var badge = document.getElementById('badge-' + child);
-      if (remaining > 0) {
-        badge.textContent = remaining;
-        badge.classList.add('show');
-      } else {
-        badge.classList.remove('show');
-      }
+      var remaining = tasks[child].length - state.done[child].size, badge = document.getElementById('badge-' + child);
+      if (remaining > 0) { badge.textContent = remaining; badge.classList.add('show'); } else { badge.classList.remove('show'); }
     }
 
-    // ===== GO HOME =====
     function goHome() {
       state.active = null;
-
       document.documentElement.style.setProperty('--active-color', '#00e5a0');
       document.documentElement.style.setProperty('--active-glow', 'rgba(0,229,160,0.25)');
       document.querySelector('.orb-1').style.background = '';
       document.querySelector('.orb-2').style.background = '';
-
       [].forEach.call(document.querySelectorAll('.avatar-card'), function (c) { c.classList.remove('active'); });
-
-      document.getElementById('mainContent').innerHTML = '' +
-        '<div class="welcome-screen">' +
-        '<div class="welcome-emoji">\uD83D\uDC4B</div>' +
-        '<div class="welcome-title">Bonjour ! Qui es-tu ?</div>' +
-        '<div class="welcome-sub">Clique sur ton avatar pour voir tes t\u00e2ches du jour</div>' +
-        '</div>';
+      document.getElementById('mainContent').innerHTML = '<div class="welcome-screen"><div class="welcome-emoji">\uD83D\uDC4B</div><div class="welcome-title">Bonjour ! Qui es-tu ?</div><div class="welcome-sub">Clique sur ton avatar pour voir tes t\u00e2ches du jour</div></div>';
     }
 
-    // ===== INIT =====
     loadDayLog();
     loadWeeklyLog();
     renderHomePanel();
     children.forEach(function (c) { updateBadge(c); });
-
-    // Reset daily state if day changed (on page load)
-    // state.done is per session; dayLog persists in localStorage
   </script>
 </body>
 
