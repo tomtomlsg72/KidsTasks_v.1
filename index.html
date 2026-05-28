@@ -139,6 +139,15 @@
 
     let SECRET_CODE = '1234';
 
+    // Polyfill padStart pour iOS 9
+    if (!String.prototype.padStart) {
+      String.prototype.padStart = function (len, pad) {
+        var s = String(this);
+        while (s.length < len) s = (pad || ' ') + s;
+        return s;
+      };
+    }
+
     let state = {
       active: null,
       done: { jade: new Set(), alya: new Set(), eden: new Set(), mady: new Set() },
@@ -282,32 +291,31 @@
       const week = getWeekDays();
       let html = '';
 
-      children.forEach(child => {
-        const todayData = getTodayData(child);
-        const color = colors[child];
-        const timeMsg = getTimeEarned(child);
+      children.forEach(function (child) {
+        var todayData = getTodayData(child);
+        var color = colors[child];
 
         // Weekly day cells
-        let daysHtml = '';
-        week.forEach(w => {
-          const dayData = getDayData(w.key, child);
-          const done = dayData && dayData.allDone && !w.isToday;
-          const classes = 'day-cell' + (w.isToday ? ' today' : '') + (done ? ' done' : '');
+        var daysHtml = '';
+        week.forEach(function (w) {
+          var dayData = getDayData(w.key, child);
+          var done = dayData && dayData.allDone && !w.isToday;
+          var classes = 'day-cell' + (w.isToday ? ' today' : '') + (done ? ' done' : '');
           daysHtml += '<div class="' + classes + '">' + w.label + '</div>';
         });
 
         // Behavior buttons
-        let behHtml = '';
-        behavTypes.forEach(type => {
-          const count = todayData.behaviors[type] || 0;
+        var behHtml = '';
+        behavTypes.forEach(function (type) {
+          var count = todayData.behaviors[type] || 0;
           behHtml += '<button class="beh-btn" data-child="' + child + '" data-type="' + type + '" onclick="onBehaviorClick(\'' + child + '\',\'' + type + '\')">' +
             '<span class="beh-label">' + behavLabels[type] + '</span>' +
             '<span class="beh-count" id="beh-' + child + '-' + type + '">' + count + '</span>' +
             '</button>';
         });
 
-        const earned = getTimeEarned(child);
-        const msgHtml = earned > 0
+        var earned = getTimeEarned(child);
+        var msgHtml = earned > 0
           ? '<div class="time-msg">Tu as gagn\u00e9 <strong>' + earned + ' min</strong> pour demain !</div>'
           : '';
 
@@ -368,7 +376,7 @@
       document.querySelector('.orb-1').style.background = colors[child];
       document.querySelector('.orb-2').style.background = colors[child];
 
-      document.querySelectorAll('.avatar-card').forEach(c => c.classList.remove('active'));
+      [].forEach.call(document.querySelectorAll('.avatar-card'), function (c) { c.classList.remove('active'); });
       document.querySelector('.avatar-card.' + child).classList.add('active');
 
       renderTasks(child);
@@ -536,7 +544,7 @@
       document.querySelector('.orb-1').style.background = '';
       document.querySelector('.orb-2').style.background = '';
 
-      document.querySelectorAll('.avatar-card').forEach(function (c) { c.classList.remove('active'); });
+      [].forEach.call(document.querySelectorAll('.avatar-card'), function (c) { c.classList.remove('active'); });
 
       document.getElementById('mainContent').innerHTML = '' +
         '<div class="welcome-screen">' +
