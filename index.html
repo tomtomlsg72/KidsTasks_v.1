@@ -159,6 +159,9 @@
 
     function getTodayKey() {
       const d = new Date();
+      if (d.getHours() < 6) {
+        d.setDate(d.getDate() - 1);
+      }
       return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
     }
 
@@ -166,7 +169,7 @@
       const key = getTodayKey();
       if (!dayLog[key]) dayLog[key] = {};
       if (!dayLog[key][child]) {
-        dayLog[key][child] = { allDone: false, behaviors: { violence: 0, respect: 0, betises: 0 } };
+        dayLog[key][child] = { allDone: false, doneTasks: [], behaviors: { violence: 0, respect: 0, betises: 0 } };
       }
       return dayLog[key][child];
     }
@@ -454,10 +457,15 @@
       if (state.done[child].has(taskId)) return;
       state.done[child].add(taskId);
 
+      const data = getTodayData(child);
+      if (data.doneTasks.indexOf(taskId) === -1) {
+        data.doneTasks.push(taskId);
+      }
       if (state.done[child].size === tasks[child].length) {
         setAllDone(child);
         renderHomePanel();
       }
+      saveDayLog();
 
       renderTasks(child);
       updateBadge(child);
@@ -469,6 +477,8 @@
       state.done[child].delete(taskId);
 
       const data = getTodayData(child);
+      const idx = data.doneTasks.indexOf(taskId);
+      if (idx !== -1) data.doneTasks.splice(idx, 1);
       data.allDone = false;
       saveDayLog();
 
@@ -528,9 +538,24 @@
         '</div>';
     }
 
+    function restoreDoneState() {
+      const key = getTodayKey();
+      const todayLog = dayLog[key];
+      if (todayLog) {
+        children.forEach(function (child) {
+          if (todayLog[child] && todayLog[child].doneTasks) {
+            todayLog[child].doneTasks.forEach(function (taskId) {
+              state.done[child].add(taskId);
+            });
+          }
+        });
+      }
+    }
+
     // ===== INIT =====
     loadDayLog();
     loadWeeklyLog();
+    restoreDoneState();
     renderHomePanel();
     children.forEach(function (c) { updateBadge(c); });
 
