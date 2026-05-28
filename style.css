@@ -264,16 +264,19 @@ body {
 
 /* Time earned message */
 .time-msg {
-  font-size: 0.7rem;
-  color: var(--active-color);
+  font-size: 0.85rem;
+  color: var(--text);
   font-weight: 800;
   text-align: center;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.2);
+  border: 2px solid var(--active-color);
   border-radius: 100px;
-  padding: 6px 14px;
+  padding: 8px 16px;
   white-space: nowrap;
+  width: 100%;
+  margin-top: 4px;
 }
+.time-val { color: var(--active-color); font-size: 1rem; }
 
 /* Admin lock */
 .admin-bar {

@@ -291,9 +291,7 @@
         });
 
         var earned = getTimeEarned(child);
-        var msgHtml = earned > 0
-          ? '<div class="time-msg">Tu as gagn\u00e9 <strong>' + earned + ' min</strong> pour demain !</div>'
-          : '';
+        var msgHtml = '<div class="time-msg">\uD83C\uDFC6 Tu as gagn\u00e9 <strong class="time-val">' + earned + ' min</strong> pour demain !</div>';
 
         html += '<div class="child-panel" data-child="' + child + '">' +
           '<div class="avatar-card ' + child + '" data-child="' + child + '" onclick="selectChild(\'' + child + '\')">' +
