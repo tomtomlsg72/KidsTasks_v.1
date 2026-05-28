@@ -37,16 +37,6 @@ body {
 .orb-3 { width: 400px; height: 400px; top: 40%; left: 50%; transform: translate(-50%,-50%); background: white; opacity: 0.04; }
 .screen { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
 
-.topbar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 32px; border-bottom: 1px solid var(--border);
-  background: rgba(10,14,26,0.7); position: sticky; top: 0; z-index: 100;
-}
-.topbar-logo { font-family: 'Quicksand', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text); letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px; }
-.topbar-logo span { opacity: 0.5; }
-.clock { font-family: 'Quicksand', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text); letter-spacing: 0.08em; }
-.date-label { font-size: 0.72rem; color: var(--muted); text-align: right; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
-
 .avatar-card { display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; }
 .child-panel .avatar-card.active { transform: scale(1.06); }
 .avatar-ring { width: 180px; height: 180px; border-radius: 50%; padding: 3px; position: relative; }
